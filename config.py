@@ -50,3 +50,8 @@ NTFY_MIN_SCORE_NOTIFY = int(os.getenv('NTFY_MIN_SCORE_NOTIFY', '60'))  # Only no
 # Railway/Production Settings
 IS_PRODUCTION = os.getenv('RAILWAY_ENVIRONMENT', '') != '' or os.getenv('PRODUCTION', '').lower() == 'true'
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
+
+# Rate Limiting (MEXC limits: 20 requests/second for public endpoints)
+API_REQUEST_DELAY = float(os.getenv('API_REQUEST_DELAY', '0.1'))  # Seconds between requests
+MAX_WORKERS = int(os.getenv('MAX_WORKERS', '2'))  # Reduced from 5 to avoid rate limits
+RATE_LIMIT_BACKOFF = float(os.getenv('RATE_LIMIT_BACKOFF', '2.0'))  # Seconds to wait after 429 error
