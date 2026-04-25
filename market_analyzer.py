@@ -13,7 +13,7 @@ from signal_generator import generate_signal, TradingSignal, Direction
 from config import (
     SCAN_INTERVAL_SECONDS, TOP_N_SYMBOLS, EXCLUDED_SYMBOLS,
     PRICE_CHANGE_WINDOW_MINUTES, VOLUME_AVG_WINDOW_MINUTES,
-    CONSOLIDATION_LOOKBACK_MINUTES, IS_PRODUCTION
+    CONSOLIDATION_LOOKBACK_MINUTES, IS_PRODUCTION, MAX_WORKERS
 )
 
 # Setup logging
@@ -116,8 +116,8 @@ class MarketAnalyzer:
         signals = []
         analyzed = 0
         
-        # Use thread pool for parallel analysis
-        with ThreadPoolExecutor(max_workers=5) as executor:
+        # Use thread pool for parallel analysis (respect rate limits)
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             futures = {executor.submit(self.analyze_symbol, symbol): symbol 
                       for symbol in self.symbols}
             
